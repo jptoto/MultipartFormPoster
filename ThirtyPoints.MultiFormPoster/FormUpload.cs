@@ -14,9 +14,17 @@ namespace ThirtyPoints.MultiFormPoster {
             byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
 
             return PostForm(postUrl, userAgent, contentType, formData);
+            int jp = 0;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="postUrl"></param>
+        /// <param name="userAgent"></param>
+        /// <param name="contentType"></param>
+        /// <param name="formData"></param>
+        /// <returns></returns>
         private static HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData) {
             HttpWebRequest request = WebRequest.Create(postUrl) as HttpWebRequest;
 
