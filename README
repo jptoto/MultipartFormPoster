@@ -1,0 +1,10 @@
+MultiFormPoster is a .NET 3.5 class library for creating form POSTs which are commonly used for accessing
+web APIs. This is typically done with the WebClient Upload file method but that class doesn't give you the 
+flexibility to add more name/value parameters to the form POST.
+
+Useage: TODO
+
+Credit: This class is based heavily on a blog post by Brian Grinstead which you may find here:
+http://www.briangrinstead.com/blog/multipart-form-post-in-c
+
+I've taken his example and blown it out a bit to add some functionality such as basic http auth functions.
