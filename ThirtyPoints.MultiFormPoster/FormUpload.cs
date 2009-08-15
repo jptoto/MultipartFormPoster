@@ -7,39 +7,57 @@ using System.Text;
 namespace ThirtyPoints.MultiFormPoster {
     public static class FormUpload {
         private static readonly Encoding encoding = Encoding.UTF8;
-        public static HttpWebResponse MultipartFormDataPost(string postUrl, string userAgent, Dictionary<string, object> postParameters) {
+        
+        /// <summary>
+        /// Call the multi part form poster without any auth
+        /// </summary>
+        /// <param name="postUrl"></param>
+        /// <param name="postParameters"></param>
+        /// <returns></returns>
+        public static HttpWebResponse MultipartFormDataPost(string postUrl, Dictionary<string, object> postParameters) {
             string formDataBoundary = "-----------------------------28947758029299";
             string contentType = "multipart/form-data; boundary=" + formDataBoundary;
-
             byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
-
-            return PostForm(postUrl, userAgent, contentType, formData);
-            int jp = 0;
+            return PostForm(postUrl, contentType, formData, null, null);
         }
 
         /// <summary>
-        /// 
+        /// Call the multi part form poster with HTTP Auth params
         /// </summary>
         /// <param name="postUrl"></param>
-        /// <param name="userAgent"></param>
-        /// <param name="contentType"></param>
-        /// <param name="formData"></param>
+        /// <param name="httpAuthUser"></param>
+        /// <param name="httpAuthPassword"></param>
+        /// <param name="postParameters"></param>
         /// <returns></returns>
-        private static HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData) {
+        public static HttpWebResponse MultipartFormDataPost(string postUrl, string httpAuthUser, string httpAuthPassword, Dictionary<string, object> postParameters) {
+            string formDataBoundary = "-----------------------------28947758029299";
+            string contentType = "multipart/form-data; boundary=" + formDataBoundary;
+            byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
+            return PostForm(postUrl, contentType, formData, httpAuthUser, httpAuthPassword);
+        }
+
+
+
+
+        private static HttpWebResponse PostForm(string postUrl, string contentType, byte[] formData, string httpAuthUser, string httpAuthPassword) {
             HttpWebRequest request = WebRequest.Create(postUrl) as HttpWebRequest;
 
             if (request == null) {
-                throw new NullReferenceException("request is not a http request");
+                throw new NullReferenceException("Request is not a valid http request.");
             }
 
             // Set up the request properties
             request.Method = "POST";
             request.ContentType = contentType;
-            //request.UserAgent = userAgent;
             request.CookieContainer = new CookieContainer();
-            request.ContentLength = formData.Length;  // We need to count how many bytes we're sending. 
-            request.Credentials = new NetworkCredential("jptoto", "trustno1");
-            request.PreAuthenticate = true;
+            request.ContentLength = formData.Length;  // We need to count how many bytes we're sending.
+            
+            // If we need to support httpauth we add that on here
+            if (httpAuthUser != null && httpAuthPassword != null)
+            {
+                request.Credentials = new NetworkCredential(httpAuthUser, httpAuthPassword);
+                request.PreAuthenticate = true;
+            }
 
             using (Stream requestStream = request.GetRequestStream()) {
                 // Push it out there

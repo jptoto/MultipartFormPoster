@@ -5,6 +5,8 @@ using System.Text;
 
 namespace ThirtyPoints.MultiFormPoster {
     public class FileParameter {
+
+        // Haven't decided whether to keep this as is or only leave the File parameter option.
         public byte[] File { get; set; }
         public string FileName { get; set; }
         public string ContentType { get; set; }
