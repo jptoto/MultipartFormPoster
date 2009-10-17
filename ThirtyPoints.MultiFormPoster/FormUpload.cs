@@ -7,6 +7,7 @@ using System.Text;
 namespace ThirtyPoints.MultiFormPoster {
     public static class FormUpload {
         private static readonly Encoding encoding = Encoding.UTF8;
+       
         
         /// <summary>
         /// Call the multi part form poster without any auth
@@ -16,6 +17,7 @@ namespace ThirtyPoints.MultiFormPoster {
         /// <returns></returns>
         public static HttpWebResponse MultipartFormDataPost(string postUrl, Dictionary<string, object> postParameters) {
             string formDataBoundary = "-----------------------------28947758029299";
+            string jp;
             string contentType = "multipart/form-data; boundary=" + formDataBoundary;
             byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
             return PostForm(postUrl, contentType, formData, null, null);
