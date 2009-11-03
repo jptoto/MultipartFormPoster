@@ -65,7 +65,14 @@ namespace ThirtyPoints.MultiFormPoster {
                 requestStream.Close();
             }
 
-            return request.GetResponse() as HttpWebResponse;
+            try {
+                var response = request.GetResponse();
+                return response as HttpWebResponse;
+            }
+            catch (WebException ex) {
+                return ex.Response as HttpWebResponse;
+            }
+            
         }
 
 
