@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Web;
 
 namespace ThirtyPoints.MultiFormPoster {
     public static class FormUpload {
@@ -66,8 +67,9 @@ namespace ThirtyPoints.MultiFormPoster {
                 requestStream.Write(formData, 0, formData.Length);
                 requestStream.Close();
             }
-
+            
             return request.GetResponse() as HttpWebResponse;
+            
         }
 
 
@@ -89,6 +91,9 @@ namespace ThirtyPoints.MultiFormPoster {
 
                     // Write the file data directly to the Stream, rather than serializing it to a string.
                     formDataStream.Write(fileToUpload.File, 0, fileToUpload.File.Length);
+                    string lineEnding = "\r\n";
+                    formDataStream.Write(encoding.GetBytes(lineEnding), 0, lineEnding.Length);
+
                 } else {
                     string postData = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}\r\n",
                         boundary,
